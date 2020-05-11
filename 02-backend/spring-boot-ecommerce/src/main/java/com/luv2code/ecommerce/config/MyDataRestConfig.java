@@ -26,7 +26,9 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
                 .forDomainType(ProductCategory.class)
                 .withItemExposure((metdata ,httpMethods)->httpMethods.disable(unsuportHttpMethods))
                 .withCollectionExposure((metdata,httpMethods)->httpMethods.disable(unsuportHttpMethods)); 
-        // za prikaz id ( po defaultu ne prikazuje )        
+        // za prikaz id ( po defaultu ne prikazuje )  
+        // ako ima puno entityja moze automatski
+        // https://www.udemy.com/course/full-stack-angular-spring-boot-tutorial/learn/lecture/17820044#overview      
         config.exposeIdsFor(Product.class,ProductCategory.class);
     }
     
