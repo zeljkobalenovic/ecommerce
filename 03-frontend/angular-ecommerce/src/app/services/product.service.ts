@@ -9,7 +9,7 @@ import { ProductCategory } from '../common/product-category';
   providedIn: 'root'
 })
 export class ProductService {
-  
+    
   private baseUrl = 'http://localhost:8080/api/products';
   private categoryUrl = 'http://localhost:8080/api/product-category';
 
@@ -42,6 +42,10 @@ export class ProductService {
     );
   }
 
+  getProduct(theProductId: number) : Observable<Product> {
+    // za razliku od kolekcija pojedinacni domen objekti nisu wrapovani u spring data rest pa nema pretvaranja
+    return this.httpClient.get<Product>(`${this.baseUrl}/${theProductId}`)
+  }
   
   
 }
