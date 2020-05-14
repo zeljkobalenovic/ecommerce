@@ -22,9 +22,17 @@ export class ProductService {
     );
   }*/
 
+  // product list po category id BEZ paginacije
   getProductList(categoryId : number) : Observable<Product[]> {
     const searchUrl = `${this.baseUrl}/search/findByCategoryId?id=${categoryId}`
     return this.getProducts(searchUrl);
+  }
+
+  // product list po category id SA paginacije
+  getProductListPaginate(categoryId : number, thePage:number , thePageSize:number) : Observable<GetResponseProducts> {
+    const searchUrl = `${this.baseUrl}/search/findByCategoryId?id=${categoryId}&page=${thePage}&size=${thePageSize}`;
+    // vracamo ceo objekat listu produkata + pagination podatke
+    return this.httpClient.get<GetResponseProducts>(searchUrl);
   }
 
   searchProducts(keyword: string) : Observable<Product[]> {
@@ -32,6 +40,14 @@ export class ProductService {
     return this.getProducts(searchUrl);
   }
 
+  // search products SA paginacijom
+  searchProductsPaginate(keyword: string, thePage:number , thePageSize:number) : Observable<GetResponseProducts> {
+    const searchUrl = `${this.baseUrl}/search/findByNameContaining?name=${keyword}&page=${thePage}&size=${thePageSize}`;
+    // vracamo ceo objekat listu produkata + pagination podatke
+    return this.httpClient.get<GetResponseProducts>(searchUrl);
+  }
+
+  // ova metoda za listu producata po categoryid ( ili categoryid=1 default kad ga nema), i po keyword
   private getProducts(searchUrl: string): Observable<Product[]> {
     return this.httpClient.get<GetResponseProducts>(searchUrl).pipe(map(data => data._embedded.products));
   }
@@ -57,6 +73,13 @@ export class ProductService {
 interface GetResponseProducts {
   _embedded : {
     products : Product[];
+  } ,
+  // dodajemo i objekat paginacije koji takodje stize sa spring data rest (treba za paginaciju)
+  page : {
+    size : number,
+    totalElements : number,
+    totalPages : number,
+    number : number
   }
 }
 

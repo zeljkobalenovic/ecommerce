@@ -159,6 +159,38 @@
                 <div *ngIf="products?.length == 0" class="alert alert-warning col-md-12" role="alert">No products found.</div>
 
             </div>
+            <!-- ubacujem paginaciju -->
+            <div class="footer-pagination">
+                <div class="row">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <!-- desna polovina levih 9/12 odmaknuto sleva 30% TRAKA ZA PAGING -->
+                            <div class="col-md-9" style="padding-left:10%">
+                                <ngb-pagination [(page)]="thePageNumber"
+                                                [pageSize]="thePageSize"
+                                                [maxSize]="5"
+                                                [boundaryLinks]="true"
+                                                [collectionSize]="theTotalElements"
+                                                (pageChange)="listProducts()">
+
+                                </ngb-pagination>                                
+                            </div>
+                            <!-- desna polovina desnih 3/12 PAGE SIZE BOX -->
+                            <div class="col-md-3 mt-2" style="text-align:right">
+                                <span class="mr-2">Page Size</span>
+                                <select (change)="updatePageSize($event.target.value)">
+                                    <option selected="true">5</option>
+                                    <option>10</option>
+                                    <option>20</option>
+                                    <option>50</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+ 
+                </div>
+            </div>
         </div>
     </div>
 </div>
