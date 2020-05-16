@@ -7,7 +7,7 @@ import { Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class CartService {
-
+    
   cartItems : CartItem[] = [];
   totalPrice : Subject<number> = new Subject<number>();
   totalQuantity : Subject<number> = new Subject<number>();
@@ -43,7 +43,31 @@ export class CartService {
       this.cartItems.push(cartItem);
     }
     // na kraju izracunaj nove totale
-    this.computeCartTotals()     
+    this.computeCartTotals();     
+  }
+
+  decrementQuantity(cartItem: CartItem) {
+    // svakako ga ima u nizu - znaci nadje se item po item.id i promeni mu se quantity-- 
+    let itemIndex : number = this.cartItems.findIndex((item) => item.id === cartItem.id);
+    // kad ga nadje imam index elementa niza 
+    // ako je kolicina veca od 1 smanjujem za 1
+    if (this.cartItems[itemIndex].quantity > 1) {
+      this.cartItems[itemIndex].quantity--;
+    } else {
+     // ako je kolicina 1 izbacujem taj element niza ( posle smanjenja kolicina 0)  
+      this.cartItems.splice(itemIndex,1);
+    } 
+    // na kraju izracunaj ponovo totale
+    this.computeCartTotals();
+  }
+
+  removeItem(cartItem: CartItem) {
+    // isto kao kod decrement quantity samo sto odmah eliminisem ceo item
+    let itemIndex : number = this.cartItems.findIndex((item) => item.id === cartItem.id);
+    // sad odmah taj izbacijem 
+    this.cartItems.splice(itemIndex,1);
+    // i ponovo racunam totale
+    this.computeCartTotals();
   }
 
   computeCartTotals() {
@@ -59,6 +83,7 @@ export class CartService {
     // loguj na consolu
     this.logCartData(totalPriceValue,totalQuantityValue);
   }
+
   logCartData(totalPriceValue:number , totalQuantityValue:number) {
     console.log("Cart data :");
     for (let item of this.cartItems) {
